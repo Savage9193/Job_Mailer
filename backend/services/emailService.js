@@ -9,7 +9,10 @@ const transporter = nodemailer.createTransport({
   auth: {
     user: process.env.SMTP_USER,
     pass: process.env.SMTP_PASS
-  }
+  },
+  connectionTimeout: 10000,
+  greetingTimeout: 10000,
+  socketTimeout: 10000
 });
 
 async function sendOutreachEmail({ email, recruiterName, companyName, role, resumeFile }) {
@@ -53,7 +56,6 @@ async function sendOutreachEmail({ email, recruiterName, companyName, role, resu
   };
 
   try {
-    await transporter.verify();
     const info = await transporter.sendMail(mailOptions);
 
     return {
