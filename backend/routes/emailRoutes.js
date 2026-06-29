@@ -65,7 +65,7 @@ router.post('/send-email', upload.single('resume'), async (req, res, next) => {
       success: false,
       message: showDetails
         ? error.message || 'Unexpected server error. Please try again later.'
-        : 'Unexpected server error. Please try again later.'
+        : 'Email delivery is currently unavailable. Please try again later.'
     });
   }
 });
