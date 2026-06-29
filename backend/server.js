@@ -18,13 +18,24 @@ const app = express();
 const PORT = process.env.PORT || 5000;
 
 // Allow the frontend to call the API while keeping the origin list configurable.
-const corsOrigins = process.env.ALLOWED_ORIGIN
-  ? process.env.ALLOWED_ORIGIN.split(',').map((origin) => origin.trim())
-  : true;
+const corsOrigins = (process.env.ALLOWED_ORIGIN || '')
+  ? process.env.ALLOWED_ORIGIN.split(',').map((origin) => origin.trim()).filter(Boolean)
+  : ['http://localhost:3000', 'http://127.0.0.1:3000', 'http://localhost:5500', 'http://127.0.0.1:5500'];
 
 app.use(helmet());
 app.use(morgan('combined'));
-app.use(cors({ origin: corsOrigins }));
+app.use(cors({
+  origin: (origin, callback) => {
+    if (!origin) {
+      callback(null, true);
+      return;
+    }
+
+    const allowed = corsOrigins.includes(origin) || origin.endsWith('.vercel.app') || origin.endsWith('.onrender.com');
+    callback(null, allowed);
+  },
+  credentials: true
+}));
 app.use(express.json({ limit: '1mb' }));
 
 const apiLimiter = rateLimit({

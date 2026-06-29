@@ -1,7 +1,9 @@
 const form = document.getElementById('outreach-form');
 const previewBtn = document.getElementById('preview-btn');
 const isLocalhost = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1';
-const API_URL = isLocalhost ? 'http://localhost:5000/api/send-email' : '/api/send-email';
+const API_URL = isLocalhost
+  ? 'http://localhost:5000/api/send-email'
+  : 'https://job-mailer-ios8.onrender.com/api/send-email';
 const previewContent = document.getElementById('preview-content');
 const toast = document.getElementById('toast');
 const spinner = document.getElementById('spinner');
