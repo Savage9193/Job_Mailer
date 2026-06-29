@@ -52,14 +52,19 @@ async function sendOutreachEmail({ email, recruiterName, companyName, role, resu
     attachments
   };
 
-  await transporter.verify();
-  const info = await transporter.sendMail(mailOptions);
+  try {
+    await transporter.verify();
+    const info = await transporter.sendMail(mailOptions);
 
-  return {
-    messageId: info.messageId,
-    accepted: info.accepted,
-    rejected: info.rejected
-  };
+    return {
+      messageId: info.messageId,
+      accepted: info.accepted,
+      rejected: info.rejected
+    };
+  } catch (error) {
+    const detail = error.response || error.message || 'Unknown SMTP error';
+    throw new Error(`Email sending failed: ${detail}`);
+  }
 }
 
 module.exports = {

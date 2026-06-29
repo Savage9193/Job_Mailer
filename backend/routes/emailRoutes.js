@@ -59,7 +59,14 @@ router.post('/send-email', upload.single('resume'), async (req, res, next) => {
     });
   } catch (error) {
     console.error('Email send failed:', error);
-    return next(error);
+    const showDetails = process.env.SHOW_ERROR_DETAILS === 'true';
+
+    return res.status(500).json({
+      success: false,
+      message: showDetails
+        ? error.message || 'Unexpected server error. Please try again later.'
+        : 'Unexpected server error. Please try again later.'
+    });
   }
 });
 
